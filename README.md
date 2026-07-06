@@ -6,14 +6,33 @@ The course serves as a comprehensive introduction to modern JavaScript-based web
 
 ---
 
-## 🚀 Core Technologies Covered
+## 🚀 Tech Stack Categorization
 
-The repository explores a wide range of production-ready technologies across different development stacks:
+### 💻 Frontend (Client & UI)
 
-* **Frontend:** React, Redux, React Router, Next.js, React Native
-* **Backend:** Node.js, Express, GraphQL
-* **Databases:** MongoDB (NoSQL), PostgreSQL (Relational)
-* **Tooling & DevOps:** TypeScript, esbuild, Containers (Docker), CI/CD pipelines
+* **React & React Native** — Declarative UI for web and native mobile apps.
+* **Redux & React Router** — Global state management and client-side routing.
+
+### 🌐 Backend (APIs & Server Logic)
+
+* **Node.js & Express** — Runtime environment and framework for RESTful APIs.
+* **GraphQL (Apollo)** — Flexible query language layer for precise data fetching.
+
+### 🔄 Full-Stack Frameworks
+
+* **Next.js** — React framework enabling Server-Side Rendering (SSR) and built-in API routes.
+
+### 🗄️ Data Storage (Databases)
+
+* **MongoDB** — NoSQL, document-based data persistence.
+* **PostgreSQL** — Relational SQL database with strict schemas.
+
+### 🛠️ Tooling, Languages & DevOps
+
+* **TypeScript** — Static typing system for type-safe JavaScript.
+* **esbuild** — High-performance JavaScript bundler.
+* **Docker** — Containerization for environment isolation.
+* **CI/CD** — Automated pipelines for testing and continuous deployment.
 
 ---
 
@@ -22,18 +41,18 @@ The repository explores a wide range of production-ready technologies across dif
 The course exercises are organized sequentially by part. Each directory contains individual applications or conceptual assignments:
 
 ```text
-├── part0/      # Fundamentals of Web Apps (HTTP, DOM, Traditional vs SPA)
-├── part1/      # Introduction to React, Component State, and Event Handlers
-├── part2/      # Communicating with a Server (Axios, Effect Hooks, and CSS)
-├── part3/      # Programming a Server with Node.js and Express
-├── part4/      # Testing Express Servers & User Administration (JWT Auth)
-├── part5/      # Testing React Apps & End-to-End Testing
-├── part6/      # Advanced State Management (Redux, Redux Toolkit)
-├── part7/      # Custom Hooks & Build Tools (esbuild, Webpack)
-├── part8/      # GraphQL (Schemas, Queries, Mutations, Apollo Server/Client)
-├── part9/      # TypeScript (Type Narrowing, Express & React with TS)
-├── part10/     # React Native (Mobile Application Development)
-├── part11/     # CI/CD (Continuous Integration and Deployment workflows)
-├── part12/     # Containers (Docker, multi-container environments)
-├── part13/     # Using Relational Databases (Sequelize, Migrations)
-└── part14/     # Next.js (Server-Side Rendering & App Router) fullstack-open
+├── part0/      # Web Fundamentals
+├── part1/      # React
+├── part2/      # Axios, Effect Hooks, and CSS
+├── part3/      # Node.js & Express
+├── part4/      # Testing Express & Administration
+├── part5/      # Testing React Apps & E2E
+├── part6/      # Redux (Toolkit)
+├── part7/      # Custom Hooks & Build Tools
+├── part8/      # GraphQL
+├── part9/      # TypeScript
+├── part10/     # React Native
+├── part11/     # CI/CD
+├── part12/     # (Multi) Containers
+├── part13/     # Relational Databases
+└── part14/     # Next.js
