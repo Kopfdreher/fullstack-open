@@ -41,16 +41,16 @@ The course serves as a comprehensive introduction to modern JavaScript-based web
 The course exercises are organized sequentially by part. Each directory contains individual applications or conceptual assignments:
 
 ```text
-├── part0/      # Web Fundamentals
-├── part1/      # React
-├── part2/      # Axios, Effect Hooks, and CSS
-├── part3/      # Node.js & Express
-├── part4/      # Testing Express & Administration
-├── part5/      # Testing React Apps & E2E
-├── part6/      # Redux (Toolkit)
-├── part7/      # Custom Hooks & Build Tools
-├── part8/      # GraphQL
-├── part9/      # TypeScript
+├── part00/     # Web Fundamentals
+├── part01/     # React
+├── part02/     # Axios, Effect Hooks, and CSS
+├── part03/     # Node.js & Express
+├── part04/     # Testing Express & Administration
+├── part05/     # Testing React Apps & E2E
+├── part06/     # Redux (Toolkit)
+├── part07/     # Custom Hooks & Build Tools
+├── part08/     # GraphQL
+├── part09/     # TypeScript
 ├── part10/     # React Native
 ├── part11/     # CI/CD
 ├── part12/     # (Multi) Containers
