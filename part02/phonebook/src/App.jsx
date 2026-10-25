@@ -3,12 +3,14 @@ import personService from "./services/persons";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNum, setNewNum] = useState("");
   const [search, setSearch] = useState("");
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     personService.getAll().then((initialPersons) => {
@@ -37,9 +39,13 @@ const App = () => {
 
     personService.create(personObject).then((returnedPerson) => {
       setPersons(persons.concat(returnedPerson));
+      setMessage({ text: `Added ${returnedPerson.name}`, type: "success" });
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
+      setNewName("");
+      setNewNum("");
     });
-    setNewName("");
-    setNewNum("");
   };
 
   const updatePerson = () => {
@@ -49,11 +55,33 @@ const App = () => {
       number: newNum,
       id: person.id,
     };
-    personService.update(personObject).then((returnedPerson) => {
-      setPersons(persons.map((p) => (p.id === person.id ? returnedPerson : p)));
-      setNewName("");
-      setNewNum("");
-    });
+    personService
+      .update(personObject)
+      .then((returnedPerson) => {
+        setPersons(
+          persons.map((p) => (p.id === person.id ? returnedPerson : p)),
+        );
+        setMessage({ text: `Updated ${returnedPerson.name}`, type: "success" });
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+        setNewName("");
+        setNewNum("");
+      })
+      .catch(() => {
+        // e.g. deleted in another browser -> 404, server has no such id
+        setMessage({
+          text: `Information of ${person.name} has already been removed from server`,
+          type: "error",
+        });
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+        // drop the stale entry locally so UI matches server
+        setPersons(persons.filter((p) => p.id !== person.id));
+        setNewName("");
+        setNewNum("");
+      });
   };
 
   const deletePerson = (person) => {
@@ -79,6 +107,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter search={search} onSearchChange={handleSearchChange} />
       <h3>add a new</h3>
       <PersonForm
