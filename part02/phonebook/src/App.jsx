@@ -22,16 +22,24 @@ const App = () => {
       alert(`${newName} is already added to phonebook`);
       return;
     }
-
     const personObject = {
       name: newName,
       number: newNum,
-      id: String(persons.length + 1),
     };
 
-    setPersons(persons.concat(personObject));
+    personService.create(personObject).then((returnedPerson) => {
+      setPersons(persons.concat(returnedPerson));
+    });
     setNewName("");
     setNewNum("");
+  };
+
+  const deletePerson = (person) => {
+    if (confirm(`Delete ${person.name} ?`)) {
+      personService.remove(person.id).then(() => {
+        setPersons(persons.filter((p) => p.id !== person.id));
+      });
+    }
   };
 
   const handleNameChange = (event) => {
@@ -59,7 +67,7 @@ const App = () => {
         onSubmit={addPerson}
       />
       <h3>Numbers</h3>
-      <Persons search={search} persons={persons} />
+      <Persons search={search} persons={persons} toggleRemove={deletePerson} />
     </div>
   );
 };
