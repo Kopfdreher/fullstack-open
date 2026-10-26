@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Weather from "./Weather";
 
 const Countries = ({ filteredCountries }) => {
   const [show, setShow] = useState(null);
@@ -21,6 +22,7 @@ const Countries = ({ filteredCountries }) => {
           ))}
         </ul>
         <img src={country.flags.png} width="200" />
+        <Weather capital={country.capital} />
       </div>
     );
   }
