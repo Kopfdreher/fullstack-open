@@ -1,0 +1,8 @@
+.countriesList {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.countriesList button {
+  margin: 4px;
+}
