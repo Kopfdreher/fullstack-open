@@ -108,6 +108,22 @@ app.post("/api/persons", (request, response) => {
   response.json(person);
 });
 
+// put
+
+app.put("/api/persons/:id", (request, response) => {
+  const id = request.params.id;
+  const body = request.body;
+
+  const person = persons.find((p) => p.id === id);
+  if (!person) {
+    return response.status(404).end();
+  }
+
+  const updatedPerson = { ...person, name: body.name, number: body.number };
+  persons = persons.map((p) => (p.id === id ? updatedPerson : p));
+  response.json(updatedPerson);
+});
+
 const generateId = () => {
   const maxId =
     persons.length > 0
