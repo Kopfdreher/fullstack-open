@@ -1,7 +1,9 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 const requestLogger = (request, response, next) => {
   console.log("Method: ", request.method);
@@ -78,13 +80,29 @@ app.post("/api/notes", (request, response) => {
   response.json(note);
 });
 
+app.put("/api/notes/:id", (request, response) => {
+  const id = request.params.id;
+  const body = request.body;
+
+  const note = notes.find((note) => note.id === id);
+  if (!note) {
+    return response.status(404).end();
+  }
+
+  const changedNote = { ...note, content: body.content, important: body.important };
+
+  notes = notes.map((note) => (note.id === id ? changedNote : note));
+
+  response.json(changedNote);
+});
+
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
 
 app.use(unknownEndpoint);
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
