@@ -1,8 +1,9 @@
+require("dotenv").config();
 const express = require("express");
+const Note = require("./models/note");
+
 const app = express();
-
 app.use(express.static("dist"));
-
 app.use(express.json());
 
 const requestLogger = (request, response, next) => {
@@ -15,37 +16,20 @@ const requestLogger = (request, response, next) => {
 
 app.use(requestLogger);
 
-let notes = [
-  {
-    id: "1",
-    content: "HTML is easy",
-    important: true,
-  },
-  {
-    id: "2",
-    content: "Browser can execute only JavaScript",
-    important: false,
-  },
-  {
-    id: "3",
-    content: "GET and POST are the most important methods of HTTP protocol",
-    important: true,
-  },
-];
-
 app.get("/", (request, response) => {
   response.send("<h1>Hello World!</h1>");
 });
 
 app.get("/api/notes", (request, response) => {
-  response.json(notes);
+  Note.find({}).then((notes) => {
+    response.json(notes);
+  });
 });
 
 app.get("/api/notes/:id", (request, response) => {
-  const id = request.params.id;
-  const note = notes.find((note) => note.id === id);
-  if (note) response.json(note);
-  else response.status(404).end();
+  Note.findById(request.params.id).then((note) => {
+    response.json(note);
+  });
 });
 
 app.delete("/api/notes/:id", (request, response) => {
@@ -70,14 +54,14 @@ app.post("/api/notes", (request, response) => {
     });
   }
 
-  const note = {
+  const note = new Note({
     content: body.content,
     important: body.important || false,
-    id: generateId(),
-  };
+  });
 
-  notes = notes.concat(note);
-  response.json(note);
+  note.save().then((savedNote) => {
+    response.json(savedNote);
+  });
 });
 
 app.put("/api/notes/:id", (request, response) => {
@@ -89,7 +73,11 @@ app.put("/api/notes/:id", (request, response) => {
     return response.status(404).end();
   }
 
-  const changedNote = { ...note, content: body.content, important: body.important };
+  const changedNote = {
+    ...note,
+    content: body.content,
+    important: body.important,
+  };
 
   notes = notes.map((note) => (note.id === id ? changedNote : note));
 
@@ -102,7 +90,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint);
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
