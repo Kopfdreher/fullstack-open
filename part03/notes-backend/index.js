@@ -36,7 +36,7 @@ app.get("/api/notes/:id", (request, response, next) => {
 });
 
 app.delete("/api/notes/:id", (request, response, next) => {
-  Note.finByIdAndDelete(request.params.id)
+  Note.findByIdAndDelete(request.params.id)
     .then((result) => {
       response.status(204).end();
     })
