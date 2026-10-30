@@ -1,6 +1,6 @@
 const { test, describe } = require('node:test')
 const assert = require('node:assert')
-const { dummy, totalLikes, favoriteBlog, mostBlogs } = require('../utils/list_helper')
+const { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes } = require('../utils/list_helper')
 
 const emptyList = []
 const listWithOneBlog = [
@@ -126,6 +126,33 @@ describe('most blogs', () => {
     const solution = {
       author: 'Robert C. Martin',
       blogs: 3
+    }
+    assert.deepStrictEqual(result, solution)
+  })
+})
+
+describe('most likes', () => {
+
+  test('of empty list is zero', () => {
+    const result = mostLikes(emptyList)
+    assert.deepStrictEqual(result, {})
+  })
+
+  test('when list has only one blog, equals the likes of that', () => {
+    const result = mostLikes(listWithOneBlog)
+    const solution = {
+      author: 'Edsger W. Dijkstra',
+      likes: 5
+    }
+
+    assert.deepStrictEqual(result, solution)
+  })
+
+  test('of a bigger list is calculated right', () => {
+    const result = mostLikes(listWithManyBlogs)
+    const solution = {
+      author: 'Edsger W. Dijkstra',
+      likes: 17
     }
     assert.deepStrictEqual(result, solution)
   })
