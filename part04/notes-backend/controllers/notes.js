@@ -38,7 +38,7 @@ notesRouter.put('/:id', async (request, response) => {
   note.content = content
   note.important = important
 
-  const updatedNote = note.save()
+  const updatedNote = await note.save()
   response.json(updatedNote)
 })
 
