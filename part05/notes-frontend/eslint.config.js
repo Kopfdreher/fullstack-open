@@ -3,9 +3,11 @@ import globals from 'globals'
 import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
+import stylisticJs from '@stylistic/eslint-plugin'
+import { defineConfig } from 'eslint/config'
 
-export default [
-  { ignores: ['dist'] },
+export default defineConfig([
+  { ignores: ['dist/**'] },
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
@@ -22,6 +24,7 @@ export default [
       react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      '@stylistic': stylisticJs,
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -34,6 +37,15 @@ export default [
         { allowConstantExport: true },
       ],
       'react/prop-types': 0,
+      '@stylistic/indent': ['error', 2],
+      '@stylistic/linebreak-style': ['error', 'unix'],
+      '@stylistic/quotes': ['error', 'single'],
+      '@stylistic/semi': ['error', 'never'],
+      eqeqeq: 'error',
+      'no-trailing-spaces': 'error',
+      'object-curly-spacing': ['error', 'always'],
+      'arrow-spacing': ['error', { before: true, after: true }],
+      'no-console': 'off',
     },
   },
-]
+])
