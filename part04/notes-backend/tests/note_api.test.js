@@ -5,11 +5,27 @@ const supertest = require('supertest')
 const app = require('../app')
 const helper = require('./test_helper')
 const Note = require('../models/note')
+const bcrypt = require('bcrypt')
+const User = require('../models/user')
 
 const api = supertest(app)
 
+let token
+
 describe('when there is initially some notes saved', () => {
   beforeEach(async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    const user = new User({ username: 'root', passwordHash })
+    await user.save()
+
+    const loginResponse = await api
+      .post('/api/login')
+      .send({ username: 'root', password: 'sekret' })
+
+    token = loginResponse.body.token
+
     await Note.deleteMany({})
     await Note.insertMany(helper.initialNotes)
   })
@@ -69,6 +85,7 @@ describe('when there is initially some notes saved', () => {
 
       await api
         .post('/api/notes')
+        .set('Authorization', `Bearer ${token}`)
         .send(newNote)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -83,10 +100,29 @@ describe('when there is initially some notes saved', () => {
     test('fails with status code 400 if data invalid', async () => {
       const newNote = { important: true }
 
-      await api.post('/api/notes').send(newNote).expect(400)
+      await api
+        .post('/api/notes')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newNote)
+        .expect(400)
 
       const notesAtEnd = await helper.notesInDb()
 
+      assert.strictEqual(notesAtEnd.length, helper.initialNotes.length)
+    })
+
+    test('fails with status code 401 if token is not provided', async () => {
+      const newNote = {
+        content: 'token missing',
+        important: true,
+      }
+
+      await api
+        .post('/api/notes')
+        .send(newNote)
+        .expect(401)
+
+      const notesAtEnd = await helper.notesInDb()
       assert.strictEqual(notesAtEnd.length, helper.initialNotes.length)
     })
   })
