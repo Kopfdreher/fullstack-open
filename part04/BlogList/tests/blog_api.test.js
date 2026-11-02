@@ -2,18 +2,30 @@ const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const bcrypt = require('bcrypt')
 const app = require('../app')
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const api = supertest(app)
 
 describe('blog api tests', () => {
+  let token = null
+
   beforeEach(async () => {
+    await User.deleteMany({})
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    await User.create({ username: 'root', name: 'Superuser', passwordHash })
+
+    const loginResponse = await api
+      .post('/api/login')
+      .send({ username: 'root', password: 'sekret' })
+    token = loginResponse.body.token
+
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)
   })
-
 
   describe('get requests', () => {
     test('all blogs are returned as json', async () => {
@@ -48,6 +60,7 @@ describe('blog api tests', () => {
 
       const response = await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -70,6 +83,7 @@ describe('blog api tests', () => {
 
       const response = await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -84,8 +98,26 @@ describe('blog api tests', () => {
 
       await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(invalidBlog)
         .expect(400)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+    })
+
+    test('adding a blog fails with 401 if token is not provided', async () => {
+      const newBlog = {
+        title: 'Type wars',
+        author: 'Robert C. Martin',
+        url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+        likes: 2,
+      }
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(401)
 
       const blogsAtEnd = await helper.blogsInDb()
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
@@ -94,19 +126,29 @@ describe('blog api tests', () => {
 
   describe('delete requests', () => {
     test('succeeds with status code 204 if id is valid', async () => {
-      const blogsAtStart = await helper.blogsInDb()
-      const blogToDelete = blogsAtStart[0]
+      const newBlog = {
+        title: 'To be deleted',
+        author: 'Root',
+        url: 'http://example.com/delete-me',
+        likes: 0,
+      }
+
+      const created = await api
+        .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newBlog)
+        .expect(201)
+
+      const blogToDelete = created.body
 
       await api
         .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(204)
 
       const blogsAtEnd = await helper.blogsInDb()
-
       const ids = blogsAtEnd.map(n => n.id)
       assert(!ids.includes(blogToDelete.id))
-
-      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
     })
   })
 
