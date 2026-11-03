@@ -31,6 +31,7 @@ export default defineConfig([
       indent: ['error', 2],
       'linebreak-style': ['error', 'unix'],
       quotes: ['error', 'single'],
+      'jsx-quotes': ['error', 'prefer-single'],
       semi: ['error', 'never'],
       eqeqeq: 'error',
       'no-trailing-spaces': 'error',
