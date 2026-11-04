@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Blog from './components/Blog'
+import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [title, setTitle] = useState('')
@@ -35,9 +34,7 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-
+  const handleLogin = async ({ username, password }) => {
     try {
       const user = await loginService.login({ username, password })
 
@@ -46,13 +43,13 @@ const App = () => {
       )
       blogService.setToken(user.token)
       setUser(user)
-      setPassword('')
-      setUsername('')
+      return true
     } catch {
-      setErrorMessage(' wrong credentials ')
+      setErrorMessage('wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
+      return false
     }
   }
 
@@ -83,35 +80,6 @@ const App = () => {
       }, 5000)
     }
   }
-
-  const loginForm = () => (
-    <div>
-      <h2>log in to application</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>
-            username
-            <input
-              type='text'
-              value={username}
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            password
-            <input
-              type='password'
-              value={password}
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </label>
-        </div>
-        <button type='submit'>login</button>
-      </form>
-    </div>
-  )
 
   const blogForm = () => (
     <div>
@@ -163,8 +131,7 @@ const App = () => {
   return (
     <div>
       <Notification message={errorMessage} />
-      <p>{errorMessage}</p>
-      { !user && loginForm() }
+      { !user && (<LoginForm handleLogin={handleLogin}/>) }
       { user && blogSection() }
     </div>
   )
