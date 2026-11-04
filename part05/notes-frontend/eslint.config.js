@@ -40,6 +40,7 @@ export default defineConfig([
       '@stylistic/indent': ['error', 2],
       '@stylistic/linebreak-style': ['error', 'unix'],
       '@stylistic/quotes': ['error', 'single'],
+      '@stylistic/jsx-quotes': ['error', 'prefer-single'],
       '@stylistic/semi': ['error', 'never'],
       eqeqeq: 'error',
       'no-trailing-spaces': 'error',

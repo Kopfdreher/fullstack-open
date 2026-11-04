@@ -97,7 +97,7 @@ const App = () => {
         <label>
           username
           <input
-            type="text"
+            type='text'
             value={username}
             onChange={({ target }) => setUsername(target.value)}
           />
@@ -107,20 +107,20 @@ const App = () => {
         <label>
           password
           <input
-            type="password"
+            type='password'
             value={password}
             onChange={({ target }) => setPassword(target.value)}
           />
         </label>
       </div>
-      <button type="submit">login</button>
+      <button type='submit'>login</button>
     </form>
   )
 
   const noteForm = () => (
     <form onSubmit={addNote}>
       <input value={newNote} onChange={handleNoteChange} />
-      <button type="submit">save</button>
+      <button type='submit'>save</button>
     </form>
   )
 
