@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Blog from './components/Blog'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -161,6 +162,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={errorMessage} />
       <p>{errorMessage}</p>
       { !user && loginForm() }
       { user && blogSection() }
