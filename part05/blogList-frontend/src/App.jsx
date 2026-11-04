@@ -60,6 +60,24 @@ const App = () => {
     blogService.setToken(null)
   }
 
+  const addLike = async (blogObject) => {
+    try {
+      const updatedBlog = await blogService.update(blogObject)
+      if (updatedBlog) {
+        setBlogs(blogs.map((blog) => (
+          blog.id === blogObject.id ? updatedBlog : blog
+        )))
+      }
+      return true
+    } catch {
+      setErrorMessage('adding like failed')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      return false
+    }
+  }
+
   const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
     try {
@@ -83,7 +101,7 @@ const App = () => {
         <BlogForm addBlog={addBlog}/>
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} addLike={addLike} />
       )}
     </div>
   )
