@@ -66,12 +66,20 @@ const App = () => {
     event.preventDefault()
     const blogObject = { title, author, url }
 
-    const returnedBlog = await blogService.create(blogObject)
-    if (returnedBlog) {
-      setBlogs(blogs.concat(returnedBlog))
-      setTitle('')
-      setAuthor('')
-      setUrl('')
+    try {
+      const returnedBlog = await blogService.create(blogObject)
+      if (returnedBlog) {
+        setBlogs(blogs.concat(returnedBlog))
+        setTitle('')
+        setAuthor('')
+        setUrl('')
+      }
+    } catch (error) {
+      console.error('Failed to create blog:', error.response?.data || error.message)
+      setErrorMessage(error.response?.data?.error || 'creating blog failed (unauthorized — try logging out and back in)')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
   }
 
