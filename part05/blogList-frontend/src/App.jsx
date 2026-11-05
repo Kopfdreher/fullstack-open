@@ -17,7 +17,7 @@ const App = () => {
     (async () => {
       try {
         const fetchedBlogs = await blogService.getAll()
-        if (fetchedBlogs) setBlogs( fetchedBlogs )
+        if (fetchedBlogs) setBlogs( fetchedBlogs.sort((a, b) => b.likes - a.likes))
       } catch (error) {
         console.error('Failed to fetch blogs:', error)
         setErrorMessage(error)
@@ -64,9 +64,10 @@ const App = () => {
     try {
       const updatedBlog = await blogService.update(blogObject)
       if (updatedBlog) {
-        setBlogs(blogs.map((blog) => (
-          blog.id === blogObject.id ? updatedBlog : blog
-        )))
+        setBlogs(blogs
+          .map((blog) => (blog.id === blogObject.id ? updatedBlog : blog))
+          .sort((a, b) => b.likes - a.likes)
+        )
       }
       return true
     } catch {
