@@ -9,7 +9,10 @@ import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(() => {
+    const UserJSON = window.localStorage.getItem('loggedBlogListUser')
+    return UserJSON ? JSON.parse(UserJSON) : null
+  })
   const [errorMessage, setErrorMessage] = useState(null)
   const blogFormRef = useRef()
 
@@ -26,13 +29,8 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogListUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
+    blogService.setToken(user ? user.token : null)
+  }, [user])
 
   const handleLogin = async (loginObject) => {
     try {
