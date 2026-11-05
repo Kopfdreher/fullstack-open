@@ -22,7 +22,7 @@ const Blog = ({ blog, addLike, removeBlog }) => {
 
   const onRemove = async (event) => {
     event.preventDefault()
-    await removeBlog(blog.id)
+    if (confirm(`Remove blog ${blog.title} by ${blog.author}`)) await removeBlog(blog.id)
   }
 
   return (
