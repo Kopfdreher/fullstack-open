@@ -20,7 +20,8 @@ const App = () => {
     (async () => {
       try {
         const fetchedBlogs = await blogService.getAll()
-        if (fetchedBlogs) setBlogs( fetchedBlogs.sort((a, b) => b.likes - a.likes))
+        if (fetchedBlogs)
+          setBlogs(fetchedBlogs.sort((a, b) => b.likes - a.likes))
       } catch (error) {
         console.error('Failed to fetch blogs:', error)
         setErrorMessage(error)
@@ -36,9 +37,7 @@ const App = () => {
     try {
       const user = await loginService.login(loginObject)
 
-      window.localStorage.setItem(
-        'loggedBlogListUser', JSON.stringify(user)
-      )
+      window.localStorage.setItem('loggedBlogListUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
       return true
@@ -62,9 +61,10 @@ const App = () => {
     try {
       const updatedBlog = await blogService.update(blogObject)
       if (updatedBlog) {
-        setBlogs(blogs
-          .map((blog) => (blog.id === blogObject.id ? updatedBlog : blog))
-          .sort((a, b) => b.likes - a.likes)
+        setBlogs(
+          blogs
+            .map((blog) => (blog.id === blogObject.id ? updatedBlog : blog))
+            .sort((a, b) => b.likes - a.likes),
         )
       }
       return true
@@ -95,7 +95,7 @@ const App = () => {
   const removeBlog = async (id) => {
     try {
       await blogService.remove(id)
-      setBlogs(blogs.filter((blog) => (blog.id !== id)))
+      setBlogs(blogs.filter((blog) => blog.id !== id))
       return true
     } catch {
       setErrorMessage('deleting blog failed')
@@ -109,21 +109,28 @@ const App = () => {
   const blogSection = () => (
     <div>
       <h2>blogs</h2>
-      <p>{user.username} logged in <button onClick={handleLogout}>logout</button></p>
-      <Togglable buttonLabel='new blog' ref={blogFormRef}>
-        <BlogForm addBlog={addBlog}/>
+      <p>
+        {user.username} logged in <button onClick={handleLogout}>logout</button>
+      </p>
+      <Togglable buttonLabel="new blog" ref={blogFormRef}>
+        <BlogForm addBlog={addBlog} />
       </Togglable>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} addLike={addLike} removeBlog={removeBlog}/>
-      )}
+      {blogs.map((blog) => (
+        <Blog
+          key={blog.id}
+          blog={blog}
+          addLike={addLike}
+          removeBlog={removeBlog}
+        />
+      ))}
     </div>
   )
 
   return (
     <div>
       <Notification message={errorMessage} />
-      { !user && (<LoginForm handleLogin={handleLogin}/>) }
-      { user && blogSection() }
+      {!user && <LoginForm handleLogin={handleLogin} />}
+      {user && blogSection()}
     </div>
   )
 }

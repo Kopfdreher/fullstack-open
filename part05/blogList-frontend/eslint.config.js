@@ -8,10 +8,9 @@ export default [
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
-      ecmaVersion: 2020,
+      ecmaVersion: 'latest',
       globals: globals.browser,
       parserOptions: {
-        ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
         sourceType: 'module'
       }
@@ -40,10 +39,20 @@ export default [
       'no-console': 'off'
     }
   },
-  { files: ['**/*.test.{js,jsx}'],
+  {
+    files: ['**/*.test.{js,jsx}', 'testSetup.js'],
     languageOptions: {
       globals: {
+        ...globals.browser,
         ...globals.vitest
+      }
+    }
+  },
+  {
+    files: ['vite.config.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node
       }
     }
   }
