@@ -12,7 +12,8 @@
     "test": "NODE_ENV=test node --test --test-concurrency=1",
     "lint": "eslint .",
     "build:ui": "rm -rf dist && cd ../../part02/notes-frontend/ && npm run build && cp -r dist ../../part03/notes-backend/",
-    "deploy:full": "npm run build:ui && git add . && git commit -m \"deploy: uibuild\" && git push"
+    "deploy:full": "npm run build:ui && git add . && git commit -m \"deploy: uibuild\" && git push",
+    "start:test": "NODE_ENV=test node --watch index.js"
   },
   "overrides": {
     "minimatch": "^11.0.1"
