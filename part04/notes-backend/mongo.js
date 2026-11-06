@@ -1,3 +1,18 @@
+// Quick CLI for notes and users in MongoDB (uses MONGODB_URI from utils/config).
+// Prefix with "test" to point NODE_ENV at the test database.
+//
+//   node mongo.js                  list notes
+//   node mongo.js test             list notes in the test database
+//   node mongo.js note             list notes
+//   node mongo.js note "content" true [username]
+//   node mongo.js user             list users
+//   node mongo.js user <username> <name> <password>
+//   node mongo.js test user        list users in the test database
+//   node mongo.js test user <username> <name> <password>
+//
+// content and username/password must be at least 5 and 3 characters.
+// important is the string "true" or "false". username on a note is optional.
+
 const args = process.argv.slice(2)
 if (args[0] === 'test') {
   process.env.NODE_ENV = 'test'
