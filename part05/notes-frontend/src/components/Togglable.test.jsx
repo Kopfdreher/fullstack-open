@@ -5,7 +5,7 @@ import Togglable from './Togglable'
 describe('<Togglable />', () => {
   beforeEach(() => {
     render(
-      <Togglable buttonLabel='show...'>
+      <Togglable buttonLabel="show...">
         <div>togglable content</div>
       </Togglable>
     )
@@ -31,6 +31,7 @@ describe('<Togglable />', () => {
 
   test('toggled content can be closed', async () => {
     const user = userEvent.setup()
+
     const button = screen.getByText('show...')
     await user.click(button)
 

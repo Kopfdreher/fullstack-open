@@ -27,7 +27,6 @@ export default [
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true }
-
       ],
       indent: ['error', 2],
       'linebreak-style': ['error', 'unix'],
@@ -40,7 +39,8 @@ export default [
       'no-console': 'off'
     }
   },
-  { files: ['**/*.test.{js,jsx}'],
+  {
+    files: ['**/*.test.{js,jsx}'],
     languageOptions: {
       globals: {
         ...globals.vitest
