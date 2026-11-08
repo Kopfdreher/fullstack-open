@@ -56,6 +56,18 @@ describe('Blog app', () => {
         await blogElement.getByRole('button', { name: 'like' }).click()
         await expect(blogElement.getByText('likes 1')).toBeVisible()
       })
+
+      test('a blog can be deleted by same user', async ({ page }) => {
+        const blogElement = page.getByText('another Test Blog').locator('..')
+
+        page.once('dialog', async dialog => {
+          await dialog.accept()
+        })
+
+        await blogElement.getByRole('button', { name: 'view' }).click()
+        await blogElement.getByRole('button', { name: 'remove' }).click()
+        await expect(page.getByText('another Test Blog')).toBeVisible()
+      })
     })
   })
 })
