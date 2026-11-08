@@ -41,3 +41,21 @@ test('calls like handler twice when like is clicked twice', async () => {
 
   expect(mockLike).toHaveBeenCalledTimes(2)
 })
+
+test('shows the remove button only to the user who added the blog', async () => {
+  const ownedBlog = {
+    ...blog,
+    user: { id: 'owner-id', name: 'Owner' }
+  }
+
+  const user = userEvent.setup()
+
+  const { rerender } = render(
+    <Blog blog={ownedBlog} user={{ id: 'owner-id', name: 'Owner' }} />
+  )
+  await user.click(screen.getByText('view'))
+  expect(screen.getByText('remove')).toBeInTheDocument()
+
+  rerender(<Blog blog={ownedBlog} user={{ id: 'other-id', name: 'Other' }} />)
+  expect(screen.queryByText('remove')).not.toBeInTheDocument()
+})
