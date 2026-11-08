@@ -10,6 +10,21 @@ const createBlog = async (page, title, author, url) => {
   await page.getByLabel('author: ').fill(author)
   await page.getByLabel('url: ').fill(url)
   await page.getByRole('button', { name: 'create' }).click()
+
+  await page.getByText(title).waitFor()
+}
+const createBlogWithLikes = async (request, blogData, userCredentials) => {
+  const loginResponse = await request.post('/api/login', {
+    data: userCredentials
+  })
+  const user = await loginResponse.json()
+
+  await request.post('/api/blogs', {
+    data: blogData,
+    headers: {
+      'Authorization': `Bearer ${user.token}`
+    }
+  })
 }
 
-export { loginWith, createBlog }
+export { loginWith, createBlog, createBlogWithLikes }

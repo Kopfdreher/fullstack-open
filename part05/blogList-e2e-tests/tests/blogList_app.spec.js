@@ -1,5 +1,5 @@
 const { test, expect, describe, beforeEach } = require('@playwright/test')
-const { loginWith, createBlog } = require('./helper')
+const { loginWith, createBlog, createBlogWithLikes } = require('./helper')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -95,6 +95,38 @@ describe('Blog app', () => {
         const blogElement = page.getByText('another Test Blog').locator('..')
         await blogElement.getByRole('button', { name: 'view' }).click()
         await expect(page.getByText('remove')).not.toBeVisible()
+      })
+    })
+
+    describe('multiple blogs exist', () => {
+      beforeEach(async ({ page, request }) => {
+        const userCredentials = { username: 'sgavrilo', password: 'superSave' }
+
+        await createBlogWithLikes(
+          request,
+          { title: 'Blog 1', author: 'Author 1', url: 'URL 1', likes: 3 },
+          userCredentials,
+        )
+        await createBlogWithLikes(
+          request,
+          { title: 'Blog 2', author: 'Author 2', url: 'URL 2', likes: 10 },
+          userCredentials,
+        )
+        await createBlogWithLikes(
+          request,
+          { title: 'Blog 3', author: 'Author 3', url: 'URL 3', likes: 1 },
+          userCredentials,
+        )
+
+        await page.reload()
+      })
+
+      test('blogs are arranged by amount of likes', async ({ page }) => {
+        const blogs = page.locator('.blog')
+
+        await expect(blogs.nth(0)).toContainText('Blog 2')
+        await expect(blogs.nth(1)).toContainText('Blog 1')
+        await expect(blogs.nth(2)).toContainText('Blog 3')
       })
     })
   })
