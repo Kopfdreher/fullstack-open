@@ -7,55 +7,46 @@ const blog = {
   title: 'a good title',
   author: 'some author',
   url: 'some URL',
-  likes: 42
+  likes: 42,
+  user: { username: 'owner', name: 'Owner' }
 }
 
-test('renders title and author but not url or likes by default', () => {
+const owner = { username: 'owner', name: 'Owner' }
+const otherUser = { username: 'other', name: 'Other' }
+
+test('shows blog information and likes but no buttons to unauthenticated users', () => {
   render(<Blog blog={blog} />)
 
   expect(screen.getByText('a good title', { exact: false })).toBeInTheDocument()
   expect(screen.getByText('some author', { exact: false })).toBeInTheDocument()
-  expect(screen.queryByText('some URL')).not.toBeInTheDocument()
-  expect(screen.queryByText('likes', { exact: false })).not.toBeInTheDocument()
-})
-
-test('shows url and likes when view button is clicked', async () => {
-  render(<Blog blog={blog} />)
-
-  const user = userEvent.setup()
-  await user.click(screen.getByText('view'))
-
   expect(screen.getByText('some URL')).toBeInTheDocument()
   expect(screen.getByText('likes 42', { exact: false })).toBeInTheDocument()
+  expect(screen.queryByText('like')).not.toBeInTheDocument()
+  expect(screen.queryByText('remove')).not.toBeInTheDocument()
+})
+
+test('shows only the like button to an authenticated user who is not the creator', () => {
+  render(<Blog blog={blog} user={otherUser} addLike={vi.fn()} />)
+
+  expect(screen.getByText('like')).toBeInTheDocument()
+  expect(screen.queryByText('remove')).not.toBeInTheDocument()
+})
+
+test('shows the like and remove buttons to the blog creator', () => {
+  render(<Blog blog={blog} user={owner} addLike={vi.fn()} removeBlog={vi.fn()} />)
+
+  expect(screen.getByText('like')).toBeInTheDocument()
+  expect(screen.getByText('remove')).toBeInTheDocument()
 })
 
 test('calls like handler twice when like is clicked twice', async () => {
   const mockLike = vi.fn()
 
-  render(<Blog blog={blog} addLike={mockLike} />)
+  render(<Blog blog={blog} user={otherUser} addLike={mockLike} />)
 
   const user = userEvent.setup()
-  await user.click(screen.getByText('view'))
   await user.click(screen.getByText('like'))
   await user.click(screen.getByText('like'))
 
   expect(mockLike).toHaveBeenCalledTimes(2)
-})
-
-test('shows the remove button only to the user who added the blog', async () => {
-  const ownedBlog = {
-    ...blog,
-    user: { id: 'owner-id', name: 'Owner' }
-  }
-
-  const user = userEvent.setup()
-
-  const { rerender } = render(
-    <Blog blog={ownedBlog} user={{ id: 'owner-id', name: 'Owner' }} />
-  )
-  await user.click(screen.getByText('view'))
-  expect(screen.getByText('remove')).toBeInTheDocument()
-
-  rerender(<Blog blog={ownedBlog} user={{ id: 'other-id', name: 'Other' }} />)
-  expect(screen.queryByText('remove')).not.toBeInTheDocument()
 })
