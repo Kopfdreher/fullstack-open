@@ -6,6 +6,9 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import { Routes, Route, Link, useNavigate, useMatch } from 'react-router-dom'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import Button from '@mui/material/Button'
 
 const App = () => {
   const navigate = useNavigate()
@@ -122,10 +125,6 @@ const App = () => {
     </div>
   )
 
-  const padding = {
-    padding: 5
-  }
-
   const match = useMatch('/blogs/:id')
 
   const blog = match
@@ -135,12 +134,31 @@ const App = () => {
   return (
     <div>
       <Notification message={errorMessage} />
-      <div>
-        <Link style={padding} to='/'>blogs</Link>
-        {user && <Link style={padding} to='/create'>new blog</Link>}
-        {user && <button onClick={handleLogout}>logout</button>}
-        {!user && <Link style={padding} to='/login'>login</Link>}
-      </div>
+      <AppBar position='static'>
+        <Toolbar>
+          <Button color='inherit' component={Link} to='/'>
+            blogs
+          </Button>
+          {user && (
+            <Button color='inherit' component={Link} to='/create'>
+              new blog
+            </Button>
+          )}
+          {user && (
+            <span>{user.name} logged in</span>
+          )}
+          {user && (
+            <Button color='inherit' onClick={handleLogout}>
+              logout
+            </Button>
+          )}
+          {!user && (
+            <Button color='inherit' component={Link} to='/login'>
+              login
+            </Button>
+          )}
+        </Toolbar>
+      </AppBar>
       <Routes>
         <Route path='/' element={
           blogSection()
