@@ -9,6 +9,7 @@ import { Routes, Route, Link, useNavigate, useMatch } from 'react-router-dom'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
 
 const App = () => {
   const navigate = useNavigate()
@@ -145,9 +146,6 @@ const App = () => {
             </Button>
           )}
           {user && (
-            <span>{user.name} logged in</span>
-          )}
-          {user && (
             <Button color='inherit' onClick={handleLogout}>
               logout
             </Button>
@@ -159,27 +157,29 @@ const App = () => {
           )}
         </Toolbar>
       </AppBar>
-      <Routes>
-        <Route path='/' element={
-          blogSection()
-        } />
-        <Route path='/login' element={
-          <LoginForm user={user} handleLogin={handleLogin} handleLogout={handleLogout}/>
-        } />
-        <Route path='/create' element={
-          <BlogForm addBlog={addBlog} />
-        } />
-        <Route path='/blogs/:id' element={
-          blog
-            ? <Blog
-              blog={blog}
-              addLike={addLike}
-              removeBlog={removeBlog}
-              user={user}
-            />
-            : <p>blog not found</p>
-        } />
-      </Routes>
+      <Container sx={{ paddingTop: 2, paddingBottom: 4 }}>
+        <Routes>
+          <Route path='/' element={
+            blogSection()
+          } />
+          <Route path='/login' element={
+            <LoginForm user={user} handleLogin={handleLogin} handleLogout={handleLogout}/>
+          } />
+          <Route path='/create' element={
+            <BlogForm addBlog={addBlog} />
+          } />
+          <Route path='/blogs/:id' element={
+            blog
+              ? <Blog
+                blog={blog}
+                addLike={addLike}
+                removeBlog={removeBlog}
+                user={user}
+              />
+              : <p>blog not found</p>
+          } />
+        </Routes>
+      </Container>
     </div>
   )
 }
