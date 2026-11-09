@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const LoginForm = ({ handleLogin }) => {
+const LoginForm = ({ user, handleLogin, handleLogout }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 

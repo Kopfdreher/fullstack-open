@@ -6,8 +6,10 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 
 const App = () => {
+  const navigate = useNavigate()
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(() => {
     const UserJSON = window.localStorage.getItem('loggedBlogListUser')
@@ -40,6 +42,7 @@ const App = () => {
       window.localStorage.setItem('loggedBlogListUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
+      navigate('/')
       return true
     } catch {
       setErrorMessage('wrong credentials')
@@ -55,6 +58,7 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogListUser')
     setUser(null)
     blogService.setToken(null)
+    navigate('/')
   }
 
   const addLike = async (blogObject) => {
@@ -109,9 +113,6 @@ const App = () => {
   const blogSection = () => (
     <div>
       <h2>blogs</h2>
-      <p>
-        {user.name} logged in <button onClick={handleLogout}>logout</button>
-      </p>
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm addBlog={addBlog} />
       </Togglable>
@@ -127,13 +128,36 @@ const App = () => {
     </div>
   )
 
+  const padding = {
+    padding: 5
+  }
+
   return (
     <div>
       <Notification message={errorMessage} />
+      <div>
+        <Link style={padding} to='/'>blogs</Link>
+        {!user && <Link style={padding} to='/login'>login</Link>}
+        {user && <button onClick={handleLogout}>logout</button>}
+      </div>
+      <Routes>
+        <Route path='/' element={
+          blogSection()
+        } />
+        <Route path='/login' element={
+          <LoginForm user={user} handleLogin={handleLogin} handleLogout={handleLogout}/>
+        } />
+      </Routes>
+    </div>
+  )
+  /*
+  return (
+    <div>
       {!user && <LoginForm handleLogin={handleLogin} />}
       {user && blogSection()}
     </div>
   )
+  */
 }
 
 export default App
