@@ -3,14 +3,6 @@ import { useState } from 'react'
 const Blog = ({ blog, addLike, removeBlog, user }) => {
   const [ visible, setVisible ] = useState(false)
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
   const onLike = async (event) => {
     event.preventDefault()
     await addLike({
@@ -25,18 +17,16 @@ const Blog = ({ blog, addLike, removeBlog, user }) => {
   }
 
   return (
-    <div style={blogStyle} className='blog'>
-      {blog.title} {blog.author} <button onClick={() => setVisible(!visible)}>
-        {visible ? 'hide' : 'view'}
-      </button>
-      {visible && (<div className='details'>
+    <div className='blog'>
+      <h2>{blog.author}: {blog.title}</h2>
+      <div className='details'>
         <div>{blog.url}</div>
         <div>likes {blog.likes} <button onClick={onLike}>like</button></div>
-        <div>{blog.author}</div>
+        <div>Added by {blog.user.username}</div>
         {user && blog.user.username === user.username && (
           <button onClick={onRemove}>remove</button>
         )}
-      </div>)}
+      </div>
     </div>
   )
 }

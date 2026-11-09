@@ -6,7 +6,7 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import { Routes, Route, Link, useNavigate } from 'react-router-dom'
+import { Routes, Route, Link, useNavigate, useMatch } from 'react-router-dom'
 
 const App = () => {
   const navigate = useNavigate()
@@ -116,7 +116,12 @@ const App = () => {
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm addBlog={addBlog} />
       </Togglable>
-      {blogs.map((blog) => (
+      <ul>
+        {blogs.map((blog) => (
+          <li key={blog.id}>
+            <Link to={`/blogs/${blog.id}`}>{blog.title} by {blog.author}</Link>
+          </li>
+        /*
         <Blog
           key={blog.id}
           blog={blog}
@@ -124,13 +129,21 @@ const App = () => {
           removeBlog={removeBlog}
           user={user}
         />
-      ))}
+        */
+        ))}
+      </ul>
     </div>
   )
 
   const padding = {
     padding: 5
   }
+
+  const match = useMatch('/blogs/:id')
+
+  const blog = match
+    ? blogs.find((b) => b.id === match.params.id)
+    : null
 
   return (
     <div>
@@ -147,17 +160,19 @@ const App = () => {
         <Route path='/login' element={
           <LoginForm user={user} handleLogin={handleLogin} handleLogout={handleLogout}/>
         } />
+        <Route path='/blogs/:id' element={
+          blog
+            ? <Blog
+              blog={blog}
+              addLike={addLike}
+              removeBlog={removeBlog}
+              user={user}
+            />
+            : <p>blog not found</p>
+        } />
       </Routes>
     </div>
   )
-  /*
-  return (
-    <div>
-      {!user && <LoginForm handleLogin={handleLogin} />}
-      {user && blogSection()}
-    </div>
-  )
-  */
 }
 
 export default App
