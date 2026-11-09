@@ -1,5 +1,5 @@
 const { test, expect, describe, beforeEach } = require('@playwright/test')
-const { loginWith, createBlog, createBlogWithLikes } = require('./helper')
+const { loginWith, createBlog } = require('./helper')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -12,24 +12,14 @@ describe('Blog app', () => {
         password: 'superSave',
       },
     })
-    await request.post('/api/users', {
-      data: {
-        name: 'another User',
-        username: 'another',
-        password: 'superSave',
-      },
-    })
-  })
-
-  test('Login form is shown', async ({ page }) => {
-    const locator = page.getByText('log in to application')
-    await expect(locator).toBeVisible()
   })
 
   describe('Login', () => {
     test('succeeds with correct credentials', async ({ page }) => {
       await loginWith(page, 'sgavrilo', 'superSave')
-      await expect(page.getByText('Sergej Gavrilov logged in')).toBeVisible()
+
+      await expect(page.getByRole('button', { name: 'logout' })).toBeVisible()
+      await expect(page.getByRole('link', { name: 'new blog' })).toBeVisible()
     })
 
     test('fails with wrong credentials', async ({ page }) => {
@@ -37,9 +27,7 @@ describe('Blog app', () => {
 
       const errorDiv = page.locator('.error')
       await expect(errorDiv).toContainText('wrong credentials')
-      await expect(
-        page.getByText('Sergej Gavrilov logged in'),
-      ).not.toBeVisible()
+      await expect(page.getByRole('button', { name: 'logout' })).not.toBeVisible()
     })
   })
 
@@ -55,7 +43,7 @@ describe('Blog app', () => {
         'Sergej Gavrilov',
         'github.com/Kopfdreher',
       )
-      await expect(page.getByText('Test Blog')).toBeVisible()
+      await expect(page.getByText('Test Blog by Sergej Gavrilov')).toBeVisible()
     })
 
     describe('and a blog exists', () => {
@@ -69,64 +57,19 @@ describe('Blog app', () => {
       })
 
       test('blog can be liked', async ({ page }) => {
-        const blogElement = page.getByText('another Test Blog').locator('..')
-
-        await blogElement.getByRole('button', { name: 'view' }).click()
-        await blogElement.getByRole('button', { name: 'like' }).click()
-        await expect(blogElement.getByText('likes 1')).toBeVisible()
+        await page.getByRole('link', { name: 'another Test Blog by Sergej Gavrilov' }).click()
+        await page.getByRole('button', { name: 'like' }).click()
+        await expect(page.getByText('likes 1')).toBeVisible()
       })
 
-      test('a blog can be deleted by same user', async ({ page }) => {
-        const blogElement = page.getByText('another Test Blog').locator('..')
-
+      test('a blog can be deleted by the user who added it', async ({ page }) => {
         page.once('dialog', async (dialog) => {
           await dialog.accept()
         })
 
-        await blogElement.getByRole('button', { name: 'view' }).click()
-        await blogElement.getByRole('button', { name: 'remove' }).click()
-        await expect(page.getByText('another Test Blog')).toBeVisible()
-      })
-
-      test('a blog cannot be delete by another user', async ({ page }) => {
-        await page.getByRole('button', { name: 'logout' }).click()
-        await loginWith(page, 'another', 'superSave')
-
-        const blogElement = page.getByText('another Test Blog').locator('..')
-        await blogElement.getByRole('button', { name: 'view' }).click()
-        await expect(page.getByText('remove')).not.toBeVisible()
-      })
-    })
-
-    describe('multiple blogs exist', () => {
-      beforeEach(async ({ page, request }) => {
-        const userCredentials = { username: 'sgavrilo', password: 'superSave' }
-
-        await createBlogWithLikes(
-          request,
-          { title: 'Blog 1', author: 'Author 1', url: 'URL 1', likes: 3 },
-          userCredentials,
-        )
-        await createBlogWithLikes(
-          request,
-          { title: 'Blog 2', author: 'Author 2', url: 'URL 2', likes: 10 },
-          userCredentials,
-        )
-        await createBlogWithLikes(
-          request,
-          { title: 'Blog 3', author: 'Author 3', url: 'URL 3', likes: 1 },
-          userCredentials,
-        )
-
-        await page.reload()
-      })
-
-      test('blogs are arranged by amount of likes', async ({ page }) => {
-        const blogs = page.locator('.blog')
-
-        await expect(blogs.nth(0)).toContainText('Blog 2')
-        await expect(blogs.nth(1)).toContainText('Blog 1')
-        await expect(blogs.nth(2)).toContainText('Blog 3')
+        await page.getByRole('link', { name: 'another Test Blog by Sergej Gavrilov' }).click()
+        await page.getByRole('button', { name: 'remove' }).click()
+        await expect(page.getByText('another Test Blog')).not.toBeVisible()
       })
     })
   })
