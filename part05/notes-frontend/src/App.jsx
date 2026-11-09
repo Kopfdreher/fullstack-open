@@ -5,14 +5,18 @@ import {
   Routes, Route, Link, useMatch
 } from 'react-router-dom'
 
+import { Container, AppBar, Toolbar, Button } from '@mui/material'
+
 import NoteList from './components/NoteList'
 import Home from './components/Home'
 import Footer from './components/Footer'
 import NoteForm from './components/NoteForm'
 import Note from './components/Note'
+import Notification from './components/Notification'
 
 const App = () => {
   const [notes, setNotes] = useState([])
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
@@ -31,6 +35,10 @@ const App = () => {
   const addNote = noteObject => {
     noteService.create(noteObject).then(returnedNote => {
       setNotes(notes.concat(returnedNote))
+      setNotification({ text: `Note '${returnedNote.content}' added!`, type: 'success' })
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
     })
   }
 
@@ -63,9 +71,7 @@ const App = () => {
   }
 
 
-  const padding = {
-    padding: 5
-  }
+  const style = { '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' } }
 
   const match = useMatch('/notes/:id')
 
@@ -76,12 +82,22 @@ const App = () => {
   console.log(note)
 
   return (
-    <div>
-      <div>
-        <Link style={padding} to="/">home</Link>
-        <Link style={padding} to="/notes">notes</Link>
-        <Link style={padding} to="/create">new note</Link>
-      </div>
+    <Container>
+      <AppBar position="static">
+        <Toolbar>
+          <Button color="inherit" component={Link} to="/" sx={style}>
+            home
+          </Button>
+          <Button color="inherit" component={Link} to="/notes" sx={style}>
+            notes
+          </Button>
+          <Button color="inherit" component={Link} to="/create" sx={style}>
+            new note
+          </Button>
+        </Toolbar>
+      </AppBar>
+
+      <Notification notification={notification} />
 
       <Routes>
         <Route path="/notes/:id" element={
@@ -92,16 +108,16 @@ const App = () => {
           />
         } />
         <Route path="/notes" element={
-          <NoteList notes={notes} />
+          <NoteList notes={notes} setNotification={setNotification} />
         } />
         <Route path="/create" element={
-          <NoteForm createNote={addNote}/>
+          <NoteForm createNote={addNote} />
         } />
         <Route path="/" element={<Home />} />
       </Routes>
 
       <Footer />
-    </div>
+    </Container>
   )
 }
 
