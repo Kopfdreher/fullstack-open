@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
 
 const BlogForm = ({ addBlog }) => {
   const [title, setTitle] = useState('')
@@ -7,7 +9,7 @@ const BlogForm = ({ addBlog }) => {
 
   const onSubmit = async (event) => {
     event.preventDefault()
-    const success = await  addBlog({ title, author, url })
+    const success = await addBlog({ title, author, url })
     if (success) {
       setTitle('')
       setAuthor('')
@@ -20,36 +22,37 @@ const BlogForm = ({ addBlog }) => {
       <h2>create new</h2>
       <form onSubmit={onSubmit}>
         <div>
-          <label>
-            title: <input
-              type='text'
-              value={title}
-              placeholder='title'
-              onChange={({ target }) => setTitle(target.value)}
-            />
-          </label>
+          <TextField
+            label='title'
+            margin='normal'
+            value={title}
+            placeholder='title'
+            onChange={({ target }) => setTitle(target.value)}
+          />
         </div>
         <div>
-          <label>
-            author: <input
-              type='text'
-              value={author}
-              placeholder='author'
-              onChange={({ target }) => setAuthor(target.value)}
-            />
-          </label>
+          <TextField
+            label='author'
+            margin='normal'
+            value={author}
+            placeholder='author'
+            onChange={({ target }) => setAuthor(target.value)}
+          />
         </div>
         <div>
-          <label>
-            url: <input
-              type='text'
-              value={url}
-              placeholder='url'
-              onChange={({ target }) => setUrl(target.value)}
-            />
-          </label>
+          <TextField
+            label='url'
+            margin='normal'
+            value={url}
+            placeholder='url'
+            onChange={({ target }) => setUrl(target.value)}
+          />
         </div>
-        <button type='submit'>create</button>
+        <div>
+          <Button variant='contained' color='primary' type='submit'>
+            create
+          </Button>
+        </div>
       </form>
     </div>
   )
