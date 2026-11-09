@@ -1,11 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
 import { Routes, Route, Link, useNavigate, useMatch } from 'react-router-dom'
 
 const App = () => {
@@ -16,7 +15,6 @@ const App = () => {
     return UserJSON ? JSON.parse(UserJSON) : null
   })
   const [errorMessage, setErrorMessage] = useState(null)
-  const blogFormRef = useRef()
 
   useEffect(() => {
     (async () => {
@@ -82,10 +80,10 @@ const App = () => {
   }
 
   const addBlog = async (blogObject) => {
-    blogFormRef.current.toggleVisibility()
     try {
       const returnedBlog = await blogService.create(blogObject)
       if (returnedBlog) setBlogs(blogs.concat(returnedBlog))
+      navigate('/')
       return true
     } catch {
       setErrorMessage('creating blog failed')
@@ -100,6 +98,7 @@ const App = () => {
     try {
       await blogService.remove(id)
       setBlogs(blogs.filter((blog) => blog.id !== id))
+      navigate('/')
       return true
     } catch {
       setErrorMessage('deleting blog failed')
@@ -113,23 +112,11 @@ const App = () => {
   const blogSection = () => (
     <div>
       <h2>blogs</h2>
-      <Togglable buttonLabel="new blog" ref={blogFormRef}>
-        <BlogForm addBlog={addBlog} />
-      </Togglable>
       <ul>
         {blogs.map((blog) => (
           <li key={blog.id}>
             <Link to={`/blogs/${blog.id}`}>{blog.title} by {blog.author}</Link>
           </li>
-        /*
-        <Blog
-          key={blog.id}
-          blog={blog}
-          addLike={addLike}
-          removeBlog={removeBlog}
-          user={user}
-        />
-        */
         ))}
       </ul>
     </div>
@@ -150,8 +137,9 @@ const App = () => {
       <Notification message={errorMessage} />
       <div>
         <Link style={padding} to='/'>blogs</Link>
-        {!user && <Link style={padding} to='/login'>login</Link>}
+        {user && <Link style={padding} to='/create'>new blog</Link>}
         {user && <button onClick={handleLogout}>logout</button>}
+        {!user && <Link style={padding} to='/login'>login</Link>}
       </div>
       <Routes>
         <Route path='/' element={
@@ -159,6 +147,9 @@ const App = () => {
         } />
         <Route path='/login' element={
           <LoginForm user={user} handleLogin={handleLogin} handleLogout={handleLogout}/>
+        } />
+        <Route path='/create' element={
+          <BlogForm addBlog={addBlog} />
         } />
         <Route path='/blogs/:id' element={
           blog
