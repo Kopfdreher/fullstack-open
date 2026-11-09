@@ -1,11 +1,11 @@
+import { useValues } from './stats'
+
 const Statistics = () => {
-  const good = 0
-  const neutral = 0
-  const bad = 0
-  const all = 0
-  const average = 0
-  const positive = 0
-  
+  const { good, neutral, bad } = useValues()
+  const all = good + neutral + bad
+  const average = all === 0 ? 0 : (good - bad) / all
+  const positive = all === 0 ? 0 : 100 * good / all
+
   return (
     <div>
       <h2>statistics</h2>
@@ -16,7 +16,7 @@ const Statistics = () => {
           <tr><td>bad</td><td>{bad}</td></tr>
           <tr><td>all</td><td>{all}</td></tr>
           <tr><td>average</td><td>{average}</td></tr>
-          <tr><td>positive</td><td>{positive}</td></tr>
+          <tr><td>positive</td><td>{positive} %</td></tr>
         </tbody>
       </table>
     </div>
