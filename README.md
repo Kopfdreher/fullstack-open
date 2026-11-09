@@ -1,44 +1,21 @@
-# Full Stack Open — Deep Dive Into Modern Web Development
+# Full Stack Open — Parts 0–5
 
-This repository contains my completed exercises and projects for the renowned **[Full Stack Open](https://fullstackopen.com/)** course, officially offered by the **University of Helsinki**. 
+This repository contains my completed exercises for **parts 0–5** of **[Full Stack Open](https://fullstackopen.com/)**, the University of Helsinki course on modern JavaScript web development.
 
-The course serves as a comprehensive introduction to modern JavaScript-based web development, with a primary focus on building robust, scalable Single Page Applications (SPAs) and full-stack architectures.
-
----
-
-## 🚀 Tech Stack Categorization
-
-### 💻 Frontend (Client & UI)
-
-* **React & React Native** — Declarative UI for web and native mobile apps.
-* **Redux & React Router** — Global state management and client-side routing.
-
-### 🌐 Backend (APIs & Server Logic)
-
-* **Node.js & Express** — Runtime environment and framework for RESTful APIs.
-* **GraphQL (Apollo)** — Flexible query language layer for precise data fetching.
-
-### 🔄 Full-Stack Frameworks
-
-* **Next.js** — React framework enabling Server-Side Rendering (SSR) and built-in API routes.
-
-### 🗄️ Data Storage (Databases)
-
-* **MongoDB** — NoSQL, document-based data persistence.
-* **PostgreSQL** — Relational SQL database with strict schemas.
-
-### 🛠️ Tooling, Languages & DevOps
-
-* **TypeScript** — Static typing system for type-safe JavaScript.
-* **esbuild** — High-performance JavaScript bundler.
-* **Docker** — Containerization for environment isolation.
-* **CI/CD** — Automated pipelines for testing and continuous deployment.
+Later parts live in separate repositories, linked below. Some of those repositories are not created yet.
 
 ---
 
-## 📂 Repository Structure
+## Parts in this repository
 
-The course exercises are organized sequentially by part. Each directory contains individual applications or conceptual assignments:
+| Part | Topic | Directory |
+| --- | --- | --- |
+| 0 | Web fundamentals | [`part00/`](part00/) |
+| 1 | React | [`part01/`](part01/) |
+| 2 | Axios, effect hooks, and CSS | [`part02/`](part02/) |
+| 3 | Node.js and Express | [`part03/`](part03/) |
+| 4 | Testing Express and administration | [`part04/`](part04/) |
+| 5 | Testing React apps and end-to-end tests | [`part05/`](part05/) |
 
 ```text
 ├── part00/     # Web Fundamentals
@@ -46,13 +23,31 @@ The course exercises are organized sequentially by part. Each directory contains
 ├── part02/     # Axios, Effect Hooks, and CSS
 ├── part03/     # Node.js & Express
 ├── part04/     # Testing Express & Administration
-├── part05/     # Testing React Apps & E2E
-├── part06/     # Redux (Toolkit)
-├── part07/     # Custom Hooks & Build Tools
-├── part08/     # GraphQL
-├── part09/     # TypeScript
-├── part10/     # React Native
-├── part11/     # CI/CD
-├── part12/     # (Multi) Containers
-├── part13/     # Relational Databases
-└── part14/     # Next.js
+└── part05/     # Testing React Apps & E2E
+```
+
+---
+
+## Other parts
+
+| Part | Topic | Repository |
+| --- | --- | --- |
+| 6 | Redux (Toolkit) | [fullstack-open-part06](https://github.com/Kopfdreher/fullstack-open-part06) |
+| 7 | Custom hooks and build tools | [fullstack-open-part07](https://github.com/Kopfdreher/fullstack-open-part07) |
+| 8 | GraphQL | [fullstack-open-part08](https://github.com/Kopfdreher/fullstack-open-part08) |
+| 9 | TypeScript | [fullstack-open-part09](https://github.com/Kopfdreher/fullstack-open-part09) |
+| 10 | React Native | [fullstack-open-part10](https://github.com/Kopfdreher/fullstack-open-part10) |
+| 11 | CI/CD | [fullstack-open-part11](https://github.com/Kopfdreher/fullstack-open-part11) |
+| 12 | Containers | [fullstack-open-part12](https://github.com/Kopfdreher/fullstack-open-part12) |
+| 13 | Relational databases | [fullstack-open-part13](https://github.com/Kopfdreher/fullstack-open-part13) |
+| 14 | Next.js | [fullstack-open-part14](https://github.com/Kopfdreher/fullstack-open-part14) |
+
+---
+
+## Tech stack
+
+* **Frontend:** React, React Native, Redux, React Router
+* **Backend:** Node.js, Express, GraphQL (Apollo)
+* **Full-stack:** Next.js
+* **Data:** MongoDB, PostgreSQL
+* **Tooling:** TypeScript, esbuild, Docker, CI/CD
