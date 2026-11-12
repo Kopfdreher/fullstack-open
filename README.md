@@ -32,7 +32,7 @@ Later parts live in separate repositories, linked below. Some of those repositor
 
 | Part | Topic | Repository |
 | --- | --- | --- |
-| 6 | Redux (Toolkit) | [fullstack-open-part06](https://github.com/Kopfdreher/fullstack-open-part06) |
+| 6 | Advanced state management (Zustand, TanStack Query) | [fullstack-open-part06](https://github.com/Kopfdreher/fullstack-open-part06) |
 | 7 | Custom hooks and build tools | [fullstack-open-part07](https://github.com/Kopfdreher/fullstack-open-part07) |
 | 8 | GraphQL | [fullstack-open-part08](https://github.com/Kopfdreher/fullstack-open-part08) |
 | 9 | TypeScript | [fullstack-open-part09](https://github.com/Kopfdreher/fullstack-open-part09) |
@@ -46,7 +46,7 @@ Later parts live in separate repositories, linked below. Some of those repositor
 
 ## Tech stack
 
-* **Frontend:** React, React Native, Redux, React Router
+* **Frontend:** React, React Native, Zustand, TanStack Query, React Router
 * **Backend:** Node.js, Express, GraphQL (Apollo)
 * **Full-stack:** Next.js
 * **Data:** MongoDB, PostgreSQL
